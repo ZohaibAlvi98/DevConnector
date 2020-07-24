@@ -3,7 +3,7 @@
 // const fs = require('fs');
 const path = require('path');
 var crypto = require('crypto');
-
+const jwt = require("jsonwebtoken")
 
 // const UserService = require('./user.service');
 const UserModel = require('./user.model'); 
@@ -11,7 +11,8 @@ const UserModel = require('./user.model');
 // const htmlTemplateService = require('../utility/htmltemplates');
 const UserSession = require('../userSession/userSession.model'); 
 const _ = require('lodash');
-const gravatar = require('gravatar')
+const gravatar = require('gravatar');
+const { JsonWebTokenError } = require('jsonwebtoken');
 
 
 function handleError(res,error,code){
