@@ -2,11 +2,13 @@
 
 var express = require('express');
 var controller = require('./profile.controller')
-// var auth = require('../../auth/auth.service');
+var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-router.post('/create-profile', controller.create)
+router.get('/get-user-profile', auth.isAuthenticated() ,controller.getUserProfile)
+
+router.post('/create-profile', auth.isAuthenticated(), controller.create)
 
 
 module.exports = router

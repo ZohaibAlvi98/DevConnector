@@ -3,7 +3,7 @@
 // const fs = require('fs');
 const path = require('path');
 var crypto = require('crypto');
-const jwt = require("jsonwebtoken")
+
 
 // const UserService = require('./user.service');
 const UserModel = require('./user.model'); 
@@ -31,6 +31,8 @@ exports.create = async function(req,res){
            })
            user.avatar = avatar
            await user.save()
+     
+         
             // sending access token
             res.send({
                 success: true,
