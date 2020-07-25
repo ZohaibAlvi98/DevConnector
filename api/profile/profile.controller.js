@@ -74,3 +74,43 @@ exports.create = async(req,res)=>{
     })
   }
 }
+
+exports.fetchAllProfile = async(req,res) =>{
+    try{
+        await ProfileModel.find({},async (err,allProfile)=>{
+            res.send({
+                success: true,
+                profile: allProfile
+            })
+        })
+    }catch(e){
+    res.send({
+        success: false,
+        message: e.message
+    })
+  }
+}
+
+exports.fetchAUserProfile = async(req,res)=>{
+    try{
+        await ProfileModel.findOne({user: req.params.userId}, async(err,fetchProfile)=>{
+            if(!fetchProfile){
+                res.send({
+                    success: false,
+                    message: 'No User profile found'
+                })
+            }else{
+                res.send({
+                    success: true,
+                    profile: fetchProfile
+                })
+            }
+            
+        })
+    }catch(e){
+    res.send({
+        success: false,
+        message: e.message
+    })
+  }
+}

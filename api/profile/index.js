@@ -10,5 +10,9 @@ router.get('/get-user-profile', auth.isAuthenticated() ,controller.getUserProfil
 
 router.post('/create-profile', auth.isAuthenticated(), controller.create)
 
+router.get('/fetch-all-profile', controller.fetchAllProfile)
+
+router.get('/fetch-a-userProfile/:userId', controller.fetchAUserProfile)
+
 
 module.exports = router
