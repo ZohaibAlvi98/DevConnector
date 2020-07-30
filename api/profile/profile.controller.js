@@ -1,5 +1,6 @@
 
 const ProfileModel = require('./profile.model')
+const UserModel = require('../user/user.model')
 
 
 
@@ -93,7 +94,7 @@ exports.fetchAllProfile = async(req,res) =>{
 
 exports.fetchAUserProfile = async(req,res)=>{
     try{
-        await ProfileModel.findOne({user: req.params.userId}, async(err,fetchProfile)=>{
+        await ProfileModel.findOne({user: req.user._id}, async(err,fetchProfile)=>{
             if(!fetchProfile){
                 res.send({
                     success: false,
@@ -113,4 +114,39 @@ exports.fetchAUserProfile = async(req,res)=>{
         message: e.message
     })
   }
+}
+
+exports.deleteProfile = async(req,res)=>{
+   try{ 
+       await ProfileModel.findOneAndDelete({user: req.user._id})
+
+    await UserModel.findByIdAndDelete(req.user._id)
+    res.send({
+        success: true,
+        message: "successfully deleted"
+    })
+   }catch(e){
+    res.send({
+        success: false,
+        message: e.message
+    })
+  }
+}
+
+exports.addProfileExperience = async(req,res)=>{
+    try{
+        await ProfileModel.findOne({user: req.user._id},async(err,profile)=>{
+            profile.experience.unshift(req.body)
+            await profile.save()
+            res.send({
+                success: true,
+                profile: profile
+            })
+        })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
 }

@@ -12,7 +12,9 @@ router.post('/create-profile', auth.isAuthenticated(), controller.create)
 
 router.get('/fetch-all-profile', controller.fetchAllProfile)
 
-router.get('/fetch-a-userProfile/:userId', controller.fetchAUserProfile)
+router.get('/fetch-a-userProfile',auth.isAuthenticated(), controller.fetchAUserProfile)
+
+router.post('/delete-profile', auth.isAuthenticated(), controller.deleteProfile)
 
 
 module.exports = router
