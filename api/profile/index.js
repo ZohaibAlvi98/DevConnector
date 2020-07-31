@@ -16,5 +16,14 @@ router.get('/fetch-a-userProfile',auth.isAuthenticated(), controller.fetchAUserP
 
 router.post('/delete-profile', auth.isAuthenticated(), controller.deleteProfile)
 
+router.post("/add-profile-experience", auth.isAuthenticated(), controller.addProfileExperience)
+
+router.post("/delete-profile-experience/:expId", auth.isAuthenticated(), controller.deleteProfileExperience)
+
+router.post('/add-profile-education', auth.isAuthenticated(), controller.addProfileEducation)
+
+router.post("/delete-profile-education/:eduId", auth.isAuthenticated(), controller.deleteProfileEducation)
+
+router.get('/get-github-repos', controller.getGithubRepos)
 
 module.exports = router

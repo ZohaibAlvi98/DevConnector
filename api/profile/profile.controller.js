@@ -2,7 +2,7 @@
 const ProfileModel = require('./profile.model')
 const UserModel = require('../user/user.model')
 
-
+const request = require('request')
 
 
 exports.getUserProfile = async (req,res)=>{
@@ -137,11 +137,108 @@ exports.addProfileExperience = async(req,res)=>{
     try{
         await ProfileModel.findOne({user: req.user._id},async(err,profile)=>{
             profile.experience.unshift(req.body)
+            console.log(profile)
             await profile.save()
             res.send({
                 success: true,
                 profile: profile
             })
+        })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
+}
+
+exports.deleteProfileExperience = async(req,res)=>{
+    try{
+            await ProfileModel.findOne({user: req.user._id}, async(err,profile)=>{
+                const removeIndex = profile.experience.map(async experience => experience._id).indexOf(req.params.expId)
+                profile.experience.splice(removeIndex, 1)    
+                await profile.save()       
+                res.send({
+                    success: true,
+                    profile: profile
+                })
+            })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
+}
+
+
+exports.addProfileEducation = async(req,res)=>{
+    try{
+        await ProfileModel.findOne({user: req.user._id},async(err,profile)=>{
+            profile.education.unshift(req.body)
+            console.log(profile)
+            await profile.save()
+            res.send({
+                success: true,
+                profile: profile
+            })
+        })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
+}
+
+
+exports.deleteProfileEducation = async(req,res)=>{
+    try{
+            await ProfileModel.findOne({user: req.user._id}, async(err,profile)=>{
+                const removeIndex = profile.education.map(async education => education._id).indexOf(req.params.eduId)
+                profile.education.splice(removeIndex, 1)    
+                await profile.save()       
+                res.send({
+                    success: true,
+                    profile: profile
+                })
+            })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
+}
+
+exports.getGithubRepos = async(req,res)=>{
+    try{
+       
+        const options = {
+            uri: `https://api.github.com/users/${req.query.key}/repos?per_page=5&sort=created: asc&client_id=${process.env.Client_id}&client_secret=${process.env.Client_secret}`,
+            method: 'GET',
+            headers:{
+                'user-agent': 'nodejs'
+            }
+        }
+        request(options,(error,response,body)=>{
+           
+            if(error){
+                console.error(error)
+            }else if(response.statusCode != 200){
+                res.send({
+                    success: false,
+                    message: "No github profile found"
+                })
+            }else{
+                res.send({
+                    success: true,
+                    repos: JSON.parse(body)
+                })
+            }
+
+             
+
         })
     }catch(e){
         res.send({
