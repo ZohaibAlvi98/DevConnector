@@ -74,13 +74,39 @@ exports.postLikes = async(req,res)=>{
                 message: 'Post not found'
             })
         }
-        else if(post.user.filter(likes => likes.user.toString() == req.user._id ).length > 0){
+        else if(post.likes.filter(likes => likes.user.toString() == req.user._id ).length > 0){
             res.send({
                 success: false,
                 message: 'Post already been liked'
             })
         }else{
             post.likes.unshift({user: req.user._id})
+
+            await post.save();
+            res.send({
+                success: true,
+                likes: post.likes
+            })
+        }
+    })
+}
+
+exports.postUnlike = async(req,res)=>{
+    await PostModel.findById(req.params.postId, async(err,post)=>{
+        if(!post){
+            res.send({
+                success: false,
+                message: 'Post not found'
+            })
+        }
+        else if(post.likes.filter(likes => likes.user.toString() == req.user._id ).length == 0){
+            res.send({
+                success: false,
+                message: 'Post has not been liked'
+            })
+        }else{
+           const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user._id)
+           post.likes.splice(removeIndex, 1)
 
             await post.save();
             res.send({

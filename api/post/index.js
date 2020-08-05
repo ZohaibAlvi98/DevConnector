@@ -14,4 +14,8 @@ router.get('/fetch-post-by-id/:postId',controller.fetchPostsById)
 
 router.post('/delete-post/:postId', auth.isAuthenticated(), controller.deletePost)
 
+router.post('/post-likes/:postId',auth.isAuthenticated(), controller.postLikes)
+
+router.post('/post-unlike/:postId' ,auth.isAuthenticated(), controller.postUnlike)
+
 module.exports = router
