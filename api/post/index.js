@@ -18,4 +18,8 @@ router.post('/post-likes/:postId',auth.isAuthenticated(), controller.postLikes)
 
 router.post('/post-unlike/:postId' ,auth.isAuthenticated(), controller.postUnlike)
 
+router.post('/post-comment/:postId', auth.isAuthenticated(), controller.createComment)
+
+router.post('/delete-comment/:postId/:commentId', auth.isAuthenticated(), controller.deleteComment)
+
 module.exports = router

@@ -25,15 +25,23 @@ exports.create = async (req,res)=>{
 }
 
 exports.fetchAllPosts = async(req,res)=>{
-    const posts = await PostModel.find({}).sort({date: -1})
+    try{
+        const posts = await PostModel.find({}).sort({date: -1})
     res.send({
         success: true,
         posts: posts
     })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
 }
 
 exports.fetchPostsById = async(req,res)=>{
-    await PostModel.findById(req.params.postId, async(err,post)=>{
+    try{
+        await PostModel.findById(req.params.postId, async(err,post)=>{
         if(!post){
             res.send({
                 success: false,
@@ -46,10 +54,17 @@ exports.fetchPostsById = async(req,res)=>{
             })
         }
     })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
 }
 
 exports.deletePost = async(req,res)=>{
-    await PostModel.findById(req.params.postId, async(err,post)=>{
+    try{
+        await PostModel.findById(req.params.postId, async(err,post)=>{
         if(post.user.toString() != req.user._id){
             res.send({
                 success: false,
@@ -64,10 +79,17 @@ exports.deletePost = async(req,res)=>{
             })
         }
     })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
 }
 
 exports.postLikes = async(req,res)=>{
-    await PostModel.findById(req.params.postId, async(err,post)=>{
+    try{
+        await PostModel.findById(req.params.postId, async(err,post)=>{
         if(!post){
             res.send({
                 success: false,
@@ -89,10 +111,17 @@ exports.postLikes = async(req,res)=>{
             })
         }
     })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
 }
 
 exports.postUnlike = async(req,res)=>{
-    await PostModel.findById(req.params.postId, async(err,post)=>{
+   try{
+        await PostModel.findById(req.params.postId, async(err,post)=>{
         if(!post){
             res.send({
                 success: false,
@@ -115,4 +144,65 @@ exports.postUnlike = async(req,res)=>{
             })
         }
     })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
+}
+
+exports.createComment = async(req,res)=>{
+    try{
+        req.body['user'] = req.user._id
+        req.body['name'] = req.user.name
+        req.body['avatar'] = req.user.avatar
+    await PostModel.findById(req.params.postId, async(err,post)=>{
+        post.comments.unshift(req.body)
+       await post.save()
+       res.send({
+           success: true,
+           post: post
+       })
+    })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
+}
+
+exports.deleteComment = async(req,res)=>{
+    try{
+
+      
+        await PostModel.findById(req.params.postId, async(err,post)=>{
+            const comment = post.comments.find(comment => comment._id.toString() == req.params.commentId)
+            if(!comment){
+                res.send({
+                    success: false,
+                    message: 'Comment not found'
+                })
+            }else if(comment.user._id.toString() != req.user._id){
+                res.send({
+                    success: false,
+                    message: 'User Not found'
+                })
+            }else{
+                const removeIndex = post.comments.map(comment => comment._id.toString()).indexOf(req.params.commentId)
+                post.comments.splice(removeIndex, 1)
+                await post.save();
+                res.send({
+                    success: true,
+                    post: post
+                })
+            }
+        })
+    }catch(e){
+        res.send({
+            success: false,
+            message: e.message
+        })
+      }
 }
