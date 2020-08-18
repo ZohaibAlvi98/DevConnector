@@ -35,11 +35,10 @@ exports.create = async function(req,res){
      
          
             // sending access token
-            res.send({
-                success: true,
-                user,
-                message: "You have successfully signed up."
-            }); 
+            UserSession.create({user: user._id}, (err, raw)=>{ 
+                        
+                res.send({success: true, jwt: raw._id, user})
+            })
         })
         .catch(function(error){
             //console.log('error')

@@ -28,18 +28,19 @@ export const Register = () => {
       try{
         const config ={
           headers: {
-            'Content-Type': ''
+            'Content-Type': 'application/json'
           }
         }
-        // console.log(newUser)
-        // const body = JSON.stringify(newUser)
-        // console.log(body)
-        axios.post('/api/user/create-user', formData, config)
+        
+        const body = JSON.stringify(newUser)
+        console.log(body)
+        axios.post('/api/user/create-user', body, config)
         .then(res =>{
-          if(res.success){
-            console.log(res)
+      
+          if(res.data.success){
+            console.log(res.data)
           }else{
-            console.log(res.message)
+            console.log(res.data.message)
           }
         })
       }catch(err){
