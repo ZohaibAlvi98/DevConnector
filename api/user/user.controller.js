@@ -21,6 +21,7 @@ function handleError(res,error,code){
 
 exports.create = async function(req,res){
     try{
+        console.log(req.body)
         req.body.role = "user";
         UserModel.create(req.body)
         .then( async function (user){
@@ -43,6 +44,7 @@ exports.create = async function(req,res){
         .catch(function(error){
             //console.log('error')
             //console.log(error)
+        
             if(error.errors && error.errors.email && error.errors.email.message == 'The specified email address is already in use.'){
                 res.send({message: 'The specified email address is already in use.', success: false})
             }else if(error.errors && error.errors.email && error.errors.email.message == "Path `email` is required."){
@@ -51,9 +53,7 @@ exports.create = async function(req,res){
                 res.send({message: 'Invalid password', success: false})
             }
             if(error.code == 11000)res.status(422).send(['This email address is already be in use'])
-            else{
-                handleError(res,error,500);
-            }
+           
            
             
         })
