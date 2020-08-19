@@ -5,8 +5,14 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './component/auth/Login';
 import Register from './component/auth/Register';
+//redux
+
+import { Provider} from 'react-redux'
+import store from './store'
+
 
 const App = () =>
+  <Provider store={store}>
    <Router>
     <Fragment>
     
@@ -19,6 +25,6 @@ const App = () =>
     </Fragment>
     
     </Router>
- 
+    </Provider>
 
 export default App
