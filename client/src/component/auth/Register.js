@@ -1,8 +1,14 @@
 import React, { Fragment, useState } from 'react'
 import axios from 'axios'
-import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {setAlert} from '../../actions/alert'
+import {register} from '../../actions/auth'
 
-export const Register = () => {
+import {Link} from 'react-router-dom'
+import PropTypes from 'prop-types'
+
+
+export const Register = ({setAlert, register}) => {
 
   const [formData, setFormData] = useState({
     name: '',
@@ -18,40 +24,16 @@ export const Register = () => {
   const onSubmit = async e => {
     e.preventDefault();
     if(password !== password2){
-      console.log('Passwords do not match')
+      setAlert('Passwords do not match', 'danger')
     }else{
-      console.log(formData)
-      const newUser = {
-        name,
-        email,
-        password
-      }
-      try{
-        const config ={
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-        
-        const body = JSON.stringify(newUser)
-        
-        axios.post('/api/user/create-user', body, config)
-        .then(res =>{
-      
-          if(res.data.success){
-            console.log(res.data)
-          }else{
-            console.log(res.data.message)
-          }
-        })
-      }catch(err){
-        console.log(err.response.data)
-      }
+      register({name, email, password})
+
     }
+       
   }
     return (
        <Fragment>
-           <div className="continer" style={{  width: "300px" , height: "200px", margin: "110px auto"}}>
+           <div className="continer" style={{  width: "300px" , margin: "0px auto"}}>
           <h1 className="large text-primary">Sign Up</h1>
       <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
       <form className="form" onSubmit={e => onSubmit(e)}>
@@ -94,4 +76,10 @@ export const Register = () => {
        </Fragment>
     )
 }
-export default Register
+
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired ,
+  register: PropTypes.func.isRequired,
+}
+
+export default connect(null, {setAlert, register})(Register)

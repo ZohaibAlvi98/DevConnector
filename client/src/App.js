@@ -5,6 +5,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './component/auth/Login';
 import Register from './component/auth/Register';
+import Alert from './component/layout/alert'
 //redux
 
 import { Provider} from 'react-redux'
@@ -18,10 +19,14 @@ const App = () =>
     
       <Navbar />
       <Route exact path='/' component={Landing} />
-      <Switch className='container'>
+      <section className="container">
+      <Alert   />
+      <Switch>
+       
           <Route exact path='/login' component={Login} />
           <Route exact path='/register' component={Register} />
       </Switch>
+      </section>
     </Fragment>
     
     </Router>
