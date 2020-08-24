@@ -13,7 +13,7 @@ const UserModel = require('../user/user.model');
 exports.verify = async function(req, res) {
   req.query.token = req.header('Authorization')
   console.log(req.header('Authorization'))
-  console.log('here')
+
   if (req.query.token != undefined) {
     try {
       
@@ -22,18 +22,18 @@ exports.verify = async function(req, res) {
           //console.log("err", err);
         }
         //console.log('Session found', sessions);
-        console.log(sessions)
+     
         if (sessions != undefined) {
           if (!sessions.isDeleted) {
             //console.log(sessions.userId);
-            await UserModel.findById( sessions.userId.toString()
+            await UserModel.findById( sessions.user.toString()
             , (err, user) => {
-              console.log(user)
+           
               if(user.length !=0 ){
-              console.log(user)
+             
                   res.send({
                     success: true,
-                    user: user[0]
+                    user: user
                   });
                 
             }
