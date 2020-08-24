@@ -6,4 +6,6 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
+router.get('/verify', controller.verify);
+
 module.exports = router;

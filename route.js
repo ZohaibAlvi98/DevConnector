@@ -11,6 +11,7 @@ module.exports = function(app){
     app.use('/api/post', require('./api/post'));
     app.use('/api/profile', require('./api/profile'));
     app.use('/auth', require('./auth'));
+    app.use('/api/usersession', require('./api/userSession'))
 
     // app.route('/*')
     //     .get(function(req, res) {
