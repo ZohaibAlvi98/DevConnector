@@ -5,11 +5,11 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 
 
-export const Navbar = ({auth: {token, loading}, logout}) => {
+export const Navbar = ({auth: {token, user}, logout}) => {
 
   const authLinks = (
     <ul>
-        <li><a onClick={logout} href='#!'>
+        <li><a onClick={logout} href='/'>
           <i className='fas fa-sign-out-alt'></i>{' '}
           <span className='hide-sm'>Logout</span>
         </a></li>
@@ -32,7 +32,7 @@ export const Navbar = ({auth: {token, loading}, logout}) => {
         <Link to="/"><i className="fas fa-code"></i> DevConnector</Link>
       </h1>
     {   
-    (<Fragment>{ token ? authLinks: guestLinks}</Fragment>)}
+    (<Fragment>{ user  || token ? authLinks: guestLinks}</Fragment>)}
         </nav>
     )
 }

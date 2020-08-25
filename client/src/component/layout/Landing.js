@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 
-export const Landing = ( {auth: {token} }) => {
+export const Landing = ( {auth: {token , user} }) => {
 
   const guestLinks = (
     <div className="buttons">
@@ -28,7 +28,7 @@ export const Landing = ( {auth: {token} }) => {
             other developers
           </p>
           {   
-    (<Fragment>{ token ?  authLinks: guestLinks}</Fragment>)}
+    (<Fragment>{ user || token ?  authLinks: guestLinks}</Fragment>)}
     
         </div>
       </div>
