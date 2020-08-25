@@ -11,7 +11,7 @@ router.post('/create-user', controller.create)
 
 router.get('/', controller.getAllUsers)
 
-router.get('/login', controller.login)
+router.post('/login', controller.login)
 
 
 module.exports = router

@@ -1,7 +1,12 @@
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import React, { Fragment, useState } from 'react'
+import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
+import{ login} from '../../actions/auth'
+import {setAlert} from '../../actions/alert'
 
-export const Login = () => {
+
+export const Login = ({setAlert,login, isAuthenticated}) => {
    
   const [formData, setFormData] = useState({
     email: '',
@@ -15,33 +20,17 @@ export const Login = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    console.log('success')
-    //   try{
-    //     const config ={
-    //       headers: {
-    //         'Content-Type': 'application/json'
-    //       }
-    //     }
-        
-    //     const body = JSON.stringify(newUser)
-        
-    //     axios.post('/api/user/create-user', body, config)
-    //     .then(res =>{
-      
-    //       if(res.data.success){
-    //         console.log(res.data)
-    //       }else{
-    //         console.log(res.data.message)
-    //       }
-    //     })
-    //   }catch(err){
-    //     console.log(err.response.data)
-    //   }
+    login(email,password)
+   
     }
   
+    if(isAuthenticated){
+      return <Redirect to='/dashboard' />
+    }
+
     return (
        <Fragment>
-           <div className="continer" style={{  width: "300px" , height: "200px", margin: "170px auto"}}>
+           <div className="continer" style={{  width: "300px" , margin: "0px auto"}}>
           <h1 className="large text-primary">Sign In</h1>
       <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
       <form className="form" onSubmit={e => onSubmit(e)}>
@@ -71,4 +60,13 @@ export const Login = () => {
     )
 }
 
-export default Login
+Login.prototype = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+}
+
+const mapStateToProps = state =>( {
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps,{login})(Login)

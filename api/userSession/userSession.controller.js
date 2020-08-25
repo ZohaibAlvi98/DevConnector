@@ -12,7 +12,7 @@ const UserModel = require('../user/user.model');
 // const SpotifyUser = require('../../auth/spotify/spotify.model')
 exports.verify = async function(req, res) {
   req.query.token = req.header('Authorization')
-  console.log(req.header('Authorization'))
+ 
 
   if (req.query.token != undefined) {
     try {
