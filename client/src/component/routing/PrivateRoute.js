@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Route, NavLink, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 
-const PrivateRoute = ({component: Component, auth:{isAuthenticated, loading},
+const PrivateRoute = ({component: Component, auth:{isAuthenticated, loading, token},
      ...rest
     }) => (
          <Route {...rest} 
-         render={props => isAuthenticated == null && loading ?
+         render={props => token == null && loading ?
              (<Redirect to='/login' />): (<Component {...props} />)}/>
      )
 

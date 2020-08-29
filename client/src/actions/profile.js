@@ -9,7 +9,7 @@ import {
 export const getCurrentProfile = () => async dispatch =>{
     try {
         console.log('here yar')
-        axios.get('/api/profile/get-user-profile')
+        axios.get('/api/profile/fetch-a-userProfile')
         .then(res =>{
             if(res.data.success){
                 dispatch({
