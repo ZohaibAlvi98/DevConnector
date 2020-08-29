@@ -8,8 +8,9 @@ function isAuthenticated() {
     return compose()
         // Attach user to request
         .use(function(req, res, next) {
+          console.log(req.header('x-auth-token'))
           req.query.token = req.header('x-auth-token')
-          console.log(req.query.token)
+          console.log(req.query.token +'yo')
             SessionModel.findById(req.query.token, (err,session)=>{
                 if(session!=null&&session.isDeleted==false){
                     UserModel.findById(session.user, (err, user)=>{

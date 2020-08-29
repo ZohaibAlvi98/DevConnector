@@ -7,8 +7,10 @@ const request = require('request')
 
 exports.getUserProfile = async (req,res)=>{
   try{
+      console.log(req.user._id)
     await ProfileModel.findById(req.user._id, async(err,UserProfile)=>{
         console.log(UserProfile)
+        console.log('er')
         if(!UserProfile){
             res.send({
                 success: false,
