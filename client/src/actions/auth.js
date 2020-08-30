@@ -68,6 +68,8 @@ export const register = ({name, email, password}) => async dispatch => {
                     dispatch({
                         type: REGISTER_FAIL
                 })
+                console.log(res)
+                dispatch( setAlert(res.data.message, 'danger'))
             }
         })
     }catch(err){

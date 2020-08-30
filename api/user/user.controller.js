@@ -43,7 +43,7 @@ exports.create = async function(req,res){
         .catch(function(error){
             //console.log('error')
             //console.log(error)
-        
+            console.log('here')
             if(error.errors && error.errors.email && error.errors.email.message == 'The specified email address is already in use.'){
                 res.send({message: 'The specified email address is already in use.', success: false})
             }else if(error.errors && error.errors.email && error.errors.email.message == "Path `email` is required."){
@@ -51,7 +51,7 @@ exports.create = async function(req,res){
             }else if(error.message == 'Invalid password'){
                 res.send({message: 'Invalid password', success: false})
             }
-            if(error.code == 11000)res.status(422).send(['This email address is already be in use'])
+            if(error.code == 11000)res.send({message: 'This email address is already be in use'})
            
            
             
