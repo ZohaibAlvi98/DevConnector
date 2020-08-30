@@ -39,24 +39,39 @@ exports.create = async(req,res)=>{
         // console.log(req.body)
         if(req.body.skills){
             req.body.skills = req.body.skills.split(',').map(skill => skill.trim())
-            console.log(req.body.skills)
+           
         }
         await ProfileModel.findOne({user:req.user._id}, async(err,preProfile)=>{
-            console.log('here')
+           
             if(preProfile){
                 await ProfileModel.findByIdAndUpdate(preProfile._id,req.body, async(err,updProfile)=>{
-                    console.log(updProfile)
+                    
                     res.send({
                         success: true,
                         profile: updProfile
                     })
                 })
             }else{
+
+                    if(req.body.twitter != '' || req.body.facebook != '' || req.body .instagram != '' || req.body.youtube != ''
+                    || req.body.linkedin != ''){
+                        req.body.social = ''
+                        let social = {
+                           twitter: req.body.twitter,
+                            facebook: req.body.facebook,
+                            instagram: req.body.instagram,
+                            linkedin: req.body.linkedin,
+                            youtube: req.body.youtube
+                        }
+                      req.body.social = social
+                    }
+                    
                 await ProfileModel.create(req.body, async(err,createdProfile)=>{
+                   
                     if(err){
                         res.send({
                             success: false,
-                            message: e.message
+                            message: err.message
                         })  
                     }else{
                         res.send({
