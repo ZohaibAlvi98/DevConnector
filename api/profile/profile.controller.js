@@ -41,6 +41,14 @@ exports.create = async(req,res)=>{
             req.body.skills = req.body.skills.split(',').map(skill => skill.trim())
            
         }
+        let social = {
+            twitter: req.body.twitter,
+             facebook: req.body.facebook,
+             instagram: req.body.instagram,
+             linkedin: req.body.linkedin,
+             youtube: req.body.youtube
+         }
+         req.body.social = social
         await ProfileModel.findOne({user:req.user._id}, async(err,preProfile)=>{
            
             if(preProfile){
@@ -52,7 +60,7 @@ exports.create = async(req,res)=>{
                     })
                 })
             }else{
-
+                   
                     if(req.body.twitter != '' || req.body.facebook != '' || req.body .instagram != '' || req.body.youtube != ''
                     || req.body.linkedin != ''){
                         req.body.social = ''
