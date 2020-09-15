@@ -56,7 +56,7 @@ const AddEducation = ({addEducation, history}) => {
               toggleDisabled(!toDateDisabled)
           }}
          
-        /> {' '}Current Job</p>
+        /> {' '}Currently Doing</p>
         </div>
         <div class="form-group">
           <h4>To Date</h4>
@@ -68,7 +68,7 @@ const AddEducation = ({addEducation, history}) => {
             name="description"
             cols="30"
             rows="5"
-            placeholder="Job Description"
+            placeholder="Program Description"
             value={description} onChange={e => onChange(e)}
           ></textarea>
         </div>
@@ -79,8 +79,8 @@ const AddEducation = ({addEducation, history}) => {
     )
 }
 
-AddExperience.propTypes = {
-    addExperience: PropTypes.func.isRequired,
+AddEducation.propTypes = {
+    addEducation: PropTypes.func.isRequired,
 }
 
-export default connect(null, {addExperience})(AddExperience)
+export default connect(null, {addEducation})(AddEducation)

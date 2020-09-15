@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import { getCurrentProfile } from '../../actions/profile'
 import DashboardAction from '../dashboard/DashboardAction'
+import Experience from '../dashboard/Experience'
+import Education from '../dashboard/Education'
+
+
 import Spinner from '../layout/spinner'
 
 
@@ -13,11 +17,14 @@ const Dashboard =  ({getCurrentProfile, auth:{ user, token}, profile: {profile, 
         
     },[] )
 
-    const haveProfile = (
-        <Fragment>
-            <DashboardAction />
-        </Fragment>
-    )
+    // const haveProfile = (
+    //     <Fragment>
+    //         <DashboardAction />
+    //         { profile != null ? (<div></div>) : (
+    //         <Experience experience={profile.experience}/>
+    //         )}
+    //     </Fragment>
+    // )
     const noProfile = (
         
         <Fragment>
@@ -36,7 +43,18 @@ const Dashboard =  ({getCurrentProfile, auth:{ user, token}, profile: {profile, 
         </p>
     
         { profile !== null  ? (
-         haveProfile
+          <Fragment>
+          <DashboardAction />
+          {/* { profile.experience !== null ? profile.experience ==null  ( */}
+          <Experience experience={profile.experience}/>
+          {/* : (<div></div>)
+           } */}
+            {/* { profile.education !== null ? profile.education ==null  ( */}
+          <Education education={profile.education}/>
+
+          {/* : (<div></div>)
+           } */}
+      </Fragment>
     ): loading == false  ? noProfile : (<Fragment></Fragment>) 
     }
      </Fragment>
