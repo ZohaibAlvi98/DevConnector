@@ -1,12 +1,15 @@
 import axios from 'axios'
 import {setAlert} from './alert'
+import { createHashHistory } from "history";
 
 import { 
     GET_PROFILE,
     PROFILE_ERROR,
     UPDATE_PROFILE,
      ACCOUNT_DELETED,
-     CLEAR_PROFILE
+     CLEAR_PROFILE,
+     GET_PROFILES,
+     GET_REPOS
 } from './types'
 
 export const getCurrentProfile = () => async dispatch =>{
@@ -34,6 +37,98 @@ export const getCurrentProfile = () => async dispatch =>{
     }
 }
 
+// fetch all profile
+
+
+export const fetchAllProfile = ( history) => async dispatch=>{
+    dispatch({ type: CLEAR_PROFILE})
+    try{
+       
+        await axios.get('/api/profile/fetch-all-profile')
+        .then(res =>{
+            if(res.data.success){
+                dispatch({
+                    type: GET_PROFILES,
+                    payload: res.data.profile
+                })
+            
+            }else{
+                dispatch({
+                    type: PROFILE_ERROR,
+                    message: res.data.message
+                })
+              
+            }
+        })
+    } catch(error) {
+        dispatch({
+            type: PROFILE_ERROR,
+            message: error.message
+        })
+    }
+}
+
+// fetch profile by ID
+
+
+export const fetchProfileById = (userId , history) => async dispatch=>{
+ 
+    try{
+       
+        await axios.get('/api/profile/fetch-a-userProfile/'+userId)
+        .then(res =>{
+            if(res.data.success){
+                dispatch({
+                    type: GET_PROFILE,
+                    payload: res.data.profile
+                })
+            
+            }else{
+                dispatch({
+                    type: PROFILE_ERROR,
+                    message: res.data.message
+                })
+              
+            }
+        })
+    } catch(error) {
+        dispatch({
+            type: PROFILE_ERROR,
+            message: error.message
+        })
+    }
+}
+
+// get repos
+
+
+export const getGitRepos = (username) => async dispatch=>{
+    try{
+       
+        await axios.get('/api/profile/get-github-repos?key='+username)
+        .then(res =>{
+            if(res.data.success){
+                dispatch({
+                    type: GET_REPOS,
+                    payload: res.data.profile
+                })
+            
+            }else{
+                dispatch({
+                    type: PROFILE_ERROR,
+                    message: res.data.message
+                })
+              
+            }
+        })
+    } catch(error) {
+        dispatch({
+            type: PROFILE_ERROR,
+            message: error.message
+        })
+    }
+}
+
 export const createProfile = (formData , history, edit = false) => async dispatch=>{
     try{
         const config ={
@@ -46,7 +141,7 @@ export const createProfile = (formData , history, edit = false) => async dispatc
             if(res.data.success){
                 dispatch({
                     type: GET_PROFILE,
-                    payload: res.data
+                    payload: res.data.profile
                 })
                 dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'))
                
@@ -55,7 +150,7 @@ export const createProfile = (formData , history, edit = false) => async dispatc
             }else{
                 dispatch({
                     type: PROFILE_ERROR,
-                    message: res.data
+                    message: res.data.message
                 })
               
             }
@@ -82,7 +177,7 @@ export const addExperience = (formData, history) => async dispatch => {
             if(res.data.success){
                 dispatch({
                     type: UPDATE_PROFILE,
-                    payload: res.data
+                    payload: res.data.profile
                 })
                 dispatch(setAlert('Experience Added', 'success'))
                 
@@ -90,7 +185,7 @@ export const addExperience = (formData, history) => async dispatch => {
             }else{
                 dispatch({
                     type: PROFILE_ERROR,
-                    message: res.data
+                    message: res.data.message
                 })
               
             }
@@ -117,7 +212,7 @@ export const addEducation = (formData, history) => async dispatch => {
             if(res.data.success){
                 dispatch({
                     type: UPDATE_PROFILE,
-                    payload: res.data
+                    payload: res.data.profile
                 })
                 console.log(res.data)
                 dispatch(setAlert('Education Added', 'success'))
@@ -126,7 +221,7 @@ export const addEducation = (formData, history) => async dispatch => {
             }else{
                 dispatch({
                     type: PROFILE_ERROR,
-                    message: res.data
+                    message: res.data.message
                 })
               
             }
@@ -151,7 +246,7 @@ export const deleteExperience = id => async dispatch => {
             if(res.data.success){ 
                 dispatch({
                     type: UPDATE_PROFILE,
-                    payload: res.data
+                    payload: res.data.profile
                 })
                 dispatch(setAlert('Experience Removed', 'success'))
             }
@@ -167,17 +262,19 @@ export const deleteExperience = id => async dispatch => {
 
 export const deleteEducation = id => async dispatch => {
     try{
+        
         const config ={
             headers: {
               'Content-Type': 'application/json'
             }
           }
+      
         await axios.post('/api/profile/delete-profile-education/'+id, config)
         .then(res =>{
             if(res.data.success){ 
                 dispatch({
                     type: UPDATE_PROFILE,
-                    payload: res.data
+                    payload: res.data.profile
                 })
                 dispatch(setAlert('Education Removed', 'success'))
             }
@@ -191,9 +288,10 @@ export const deleteEducation = id => async dispatch => {
 }
 
 
-export const deleteAccount = () => async dispatch => {
+export const deleteAccount = (history) => async dispatch => {
     if(window.confirm('Are You Sure You Want To Delete? This Cannot Be Undone')){
         try{
+           
             const config ={
                 headers: {
                   'Content-Type': 'application/json'
@@ -206,6 +304,7 @@ export const deleteAccount = () => async dispatch => {
                     dispatch({type: ACCOUNT_DELETED})
                        
                     dispatch(setAlert('Profile Removed', 'success'))
+                    history.push("/register")
                 }
             })
         } catch (err){

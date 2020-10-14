@@ -1,7 +1,7 @@
 
 const ProfileModel = require('./profile.model')
 const UserModel = require('../user/user.model')
-
+const PostModel = require('../post/post.model')
 const request = require('request')
 
 
@@ -119,7 +119,7 @@ exports.fetchAllProfile = async(req,res) =>{
 
 exports.fetchAUserProfile = async(req,res)=>{
     try{
-        await ProfileModel.findOne({user: req.user._id}, async(err,fetchProfile)=>{
+        await ProfileModel.findOne({user: req.params.id}, async(err,fetchProfile)=>{
             if(!fetchProfile){
                 res.send({
                     success: false,
@@ -143,6 +143,7 @@ exports.fetchAUserProfile = async(req,res)=>{
 
 exports.deleteProfile = async(req,res)=>{
    try{ 
+       await PostModel.remove({user: req.user._id})
        await ProfileModel.findOneAndDelete({user: req.user._id})
 
     await UserModel.findByIdAndDelete(req.user._id)
@@ -219,6 +220,7 @@ exports.addProfileEducation = async(req,res)=>{
 
 exports.deleteProfileEducation = async(req,res)=>{
     try{
+        console.log('here')
             await ProfileModel.findOne({user: req.user._id}, async(err,profile)=>{
                 const removeIndex = profile.education.map(async education => education._id).indexOf(req.params.eduId)
                 profile.education.splice(removeIndex, 1)    

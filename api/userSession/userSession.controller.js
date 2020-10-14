@@ -29,7 +29,7 @@ exports.verify = async function(req, res) {
             await UserModel.findById( sessions.user.toString()
             , (err, user) => {
            
-              if(user.length !=0 ){
+              if(user.length !=0 && user != null){
              
                   res.send({
                     success: true,

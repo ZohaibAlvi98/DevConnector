@@ -22,7 +22,7 @@ const Experience = ({experience, deleteExperience}) => {
         </tr>
        
     ));
-    return experience[0] != null ? experience[0] == null
+    return experience != null && experience.length != 0 ? 
         (<Fragment>
             <h2 className='my-2'>Experiences Credentials</h2>
             <table className='table'>

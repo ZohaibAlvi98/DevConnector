@@ -12,7 +12,7 @@ router.post('/create-profile', auth.isAuthenticated(), controller.create)
 
 router.get('/fetch-all-profile', controller.fetchAllProfile)
 
-router.get('/fetch-a-userProfile',auth.isAuthenticated(), controller.fetchAUserProfile)
+router.get('/fetch-a-userProfile/:id',auth.isAuthenticated(), controller.fetchAUserProfile)
 
 router.post('/delete-profile', auth.isAuthenticated(), controller.deleteProfile)
 
