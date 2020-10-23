@@ -103,11 +103,19 @@ exports.create = async(req,res)=>{
 
 exports.fetchAllProfile = async(req,res) =>{
     try{
+        let profiles = []
         await ProfileModel.find({},async (err,allProfile)=>{
-            res.send({
-                success: true,
-                profile: allProfile
+            Promise.all(allProfile.map(async profile=>{
+                await UserModel.findById(profile.user,async(err,user)=>{
+                   profiles.push({profile: profile,user: user})
+                })
+            })).then(()=>{
+                res.send({
+                    success: true,
+                    profile: profiles
+                })
             })
+         
         })
     }catch(e){
     res.send({
