@@ -9,18 +9,19 @@ import {
      ACCOUNT_DELETED,
      CLEAR_PROFILE,
      GET_PROFILES,
-     GET_REPOS
+     GET_REPOS,
+     USER_LOADED
 } from './types'
 
 export const getCurrentProfile = () => async dispatch =>{
     try {
         console.log('here yar')
-       await axios.get('/api/profile/fetch-a-userProfile')
+       await axios.get('/api/profile/get-user-profile')
         .then(res =>{
             if(res.data.success){
                 dispatch({
                     type: GET_PROFILE,
-                    payload: res.data.profile
+                    payload: res.data.UserProfile
                 })
             }else{
                 dispatch({
@@ -68,6 +69,38 @@ export const fetchAllProfile = ( history) => async dispatch=>{
     }
 }
 
+// fetch user by profileId
+
+export const fetchUserById = (userId , history) => async dispatch=>{
+ 
+    try{
+       
+        await axios.get('/api/profile/fetch-user/'+userId)
+        .then(res =>{
+            if(res.data.success){
+                dispatch({
+                    type: USER_LOADED,
+                    payload: res.data.user
+                })
+            
+            }else{
+                dispatch({
+                    type: PROFILE_ERROR,
+                    message: res.data.message
+                })
+              
+            }
+        })
+    } catch(error) {
+        dispatch({
+            type: PROFILE_ERROR,
+            message: error.message
+        })
+    }
+}
+
+
+
 // fetch profile by ID
 
 
@@ -80,7 +113,7 @@ export const fetchProfileById = (userId , history) => async dispatch=>{
             if(res.data.success){
                 dispatch({
                     type: GET_PROFILE,
-                    payload: res.data.profile
+                    payload: res.data
                 })
             
             }else{
@@ -110,10 +143,11 @@ export const getGitRepos = (username) => async dispatch=>{
             if(res.data.success){
                 dispatch({
                     type: GET_REPOS,
-                    payload: res.data.profile
+                    payload: res.data.repos
                 })
             
             }else{
+                console.log('here')
                 dispatch({
                     type: PROFILE_ERROR,
                     message: res.data.message

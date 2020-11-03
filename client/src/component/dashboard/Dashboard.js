@@ -16,7 +16,7 @@ const Dashboard =  ({getCurrentProfile, deleteAccount,history, auth:{ user, toke
     useEffect(()=>{
          getCurrentProfile()
         
-    },[] )
+    },[ getCurrentProfile] )
 
     // const haveProfile = (
     //     <Fragment>

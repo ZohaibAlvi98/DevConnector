@@ -1,4 +1,5 @@
 import { GET_PROFILE, PROFILE_ERROR, CLEAR_PROFILE, UPDATE_PROFILE, GET_PROFILES,
+    USER_LOADED,
     GET_REPOS} from "../actions/types"
 
 const initialState = {
@@ -13,6 +14,12 @@ export default function(state = initialState, action) {
     const {type, payload} = action
 
     switch(type){
+        // case USER_LOADED:
+        //         return{
+        //             ...state,
+        //             userDetail: payload,
+        //             loading: false
+        //         }
         case GET_PROFILE:
         case UPDATE_PROFILE: 
             return{

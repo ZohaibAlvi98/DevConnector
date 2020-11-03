@@ -8,7 +8,7 @@ const request = require('request')
 exports.getUserProfile = async (req,res)=>{
   try{
       console.log(req.user._id)
-    await ProfileModel.findById(req.user._id, async(err,UserProfile)=>{
+    await ProfileModel.findOne({user: req.user._id}, async(err,UserProfile)=>{
         console.log(UserProfile)
         console.log('er')
         if(!UserProfile){
@@ -107,7 +107,7 @@ exports.fetchAllProfile = async(req,res) =>{
         await ProfileModel.find({},async (err,allProfile)=>{
             Promise.all(allProfile.map(async profile=>{
                 await UserModel.findById(profile.user,async(err,user)=>{
-                   profiles.push({profile: profile,user: user})
+                   profiles.push({profile: profile,userDetail: user})
                 })
             })).then(()=>{
                 res.send({
@@ -127,17 +127,25 @@ exports.fetchAllProfile = async(req,res) =>{
 
 exports.fetchAUserProfile = async(req,res)=>{
     try{
+        let profile =[]
         await ProfileModel.findOne({user: req.params.id}, async(err,fetchProfile)=>{
             if(!fetchProfile){
+                
                 res.send({
                     success: false,
                     message: 'No User profile found'
                 })
             }else{
+                await UserModel.findById(fetchProfile.user,async(err,user)=>{
+                    // profile.push({profile: fetchProfile,userDetail: user})
+                 console.log(profile)
+                 console.log('here')
                 res.send({
                     success: true,
-                    profile: fetchProfile
+                    profile: fetchProfile,
+                    userDetail: user
                 })
+            })
             }
             
         })
@@ -248,12 +256,15 @@ exports.deleteProfileEducation = async(req,res)=>{
 
 exports.getGithubRepos = async(req,res)=>{
     try{
-       
+        console.log('yo')
+        
         const options = {
-            uri: `https://api.github.com/users/${req.query.key}/repos?per_page=5&sort=created: asc&client_id=${process.env.Client_id}&client_secret=${process.env.Client_secret}`,
+            uri: `https://api.github.com/users/${req.query.key}/repos?per_page=5&sort=created: asc`,
             method: 'GET',
             headers:{
-                'user-agent': 'nodejs'
+                'user-agent': 'nodejs',
+                'client_id': process.env.Client_id,
+                'client_secret': process.env.Client_secret
             }
         }
         request(options,(error,response,body)=>{
@@ -261,11 +272,15 @@ exports.getGithubRepos = async(req,res)=>{
             if(error){
                 console.error(error)
             }else if(response.statusCode != 200){
+                // console.log(response.statusCode)
+                // console.log(body)
                 res.send({
                     success: false,
                     message: "No github profile found"
                 })
             }else{
+               
+                console.log(body)
                 res.send({
                     success: true,
                     repos: JSON.parse(body)
@@ -281,4 +296,13 @@ exports.getGithubRepos = async(req,res)=>{
             message: e.message
         })
       }
+}
+
+exports.fetchUserById = async(req,res)=>{
+    await UserModel.findById(req.params.id,async(err,user)=>{
+        res.send({
+            success: true,
+            user: user
+        })
+    })
 }

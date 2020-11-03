@@ -9,7 +9,7 @@ import ProfileItem from './ProfileItem'
 const Profiles = ({fetchAllProfile, profile:{profiles,loading}}) => {
     useEffect(()=>{
         fetchAllProfile()
-    }, [])
+    }, [fetchAllProfile])
     
     return <Fragment>
                 {loading ? <Spinner /> : 
