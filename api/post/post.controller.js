@@ -26,7 +26,8 @@ exports.create = async (req,res)=>{
 
 exports.fetchAllPosts = async(req,res)=>{
     try{
-        const posts = await PostModel.find({}).sort({date: -1})
+        let posts = await PostModel.find({}).sort({date: -1})
+        console.log(posts)
     res.send({
         success: true,
         posts: posts
