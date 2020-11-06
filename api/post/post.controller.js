@@ -11,6 +11,7 @@ exports.create = async (req,res)=>{
         req.body['user'] = req.user._id
         
         await PostModel.create(req.body, async(err,post)=>{
+            console.log(post)
             res.send({
                 success: true,
                 post: post
@@ -66,6 +67,8 @@ exports.fetchPostsById = async(req,res)=>{
 exports.deletePost = async(req,res)=>{
     try{
         await PostModel.findById(req.params.postId, async(err,post)=>{
+            console.log(post)
+            console.log(req.user)
         if(post.user.toString() != req.user._id){
             res.send({
                 success: false,
@@ -74,6 +77,7 @@ exports.deletePost = async(req,res)=>{
 
         }else{
             await post.remove()
+            console.log('herre')
             res.send({
                 success: true,
                 message: 'Post had been deleted'
